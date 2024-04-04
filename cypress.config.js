@@ -5,9 +5,11 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    baseUrl: 'http://www.automationpractice.pl/',
     chromeWebSecurity: false,
     viewportWidth: 1280,
     viewportHeight: 800,
-    waitForAnimations: false
+    waitForAnimations: false,
+    watchForFileChanges: false
   },
 });
