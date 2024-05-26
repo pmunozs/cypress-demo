@@ -1,24 +1,31 @@
+import Login from '../../support/objects/Login'
 import { faker } from '@faker-js/faker';
 
+const login = new Login()
+
 describe('User login', () => {
-
     beforeEach(() => {
-        cy.visit('/')
-        cy.get('.login').click()
-        cy.url().should('include', 'my-account')
+        login.visit();
     })
 
-    it('should display error message if e-mail is blank or invalid', () => {
-        cy.get('#SubmitLogin').click()
-        cy.get('.alert-danger').should('be.visible').should('contain.text', 'An email address required')
-        cy.get('#email').type('fake@email')
-        cy.get('#SubmitLogin').click()
-        cy.get('.alert-danger').should('be.visible').should('contain.text', 'Invalid email address')
+    it('displays error message if e-mail is blank or invalid', () => {
+        login.signIn().click()
+        login.errorMessage().should('be.visible').should('contain.text', 'An email address required')
+        login.email().type('fake@email')
+        login.signIn().click()
+        login.errorMessage().should('be.visible').should('contain.text', 'Invalid email address')
     })
 
-    it('should display error message if password is blank or invalid', () => {
-        cy.get('#email').type(faker.internet.email())
-        cy.get('#SubmitLogin').click()
-        cy.get('.alert-danger').should('be.visible').should('contain.text', 'Password is required')
+    it('displays error message if password is blank or invalid', () => {
+        login.email().type(faker.internet.email())
+        login.signIn().click()
+        login.errorMessage().should('be.visible').should('contain.text', 'Password is required')
+    })
+
+    it('displays error message if authentication failed', () => {
+        login.email().type(faker.internet.email())
+        login.password().type(faker.internet.password())
+        login.signIn().click()
+        login.errorMessage().should('be.visible').should('contain.text', 'Authentication failed')
     })
 })
